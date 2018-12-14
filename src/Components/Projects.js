@@ -5,6 +5,12 @@ import { connect } from 'react-redux';
 import { fetchProjects, deleteProject } from '../actions/projectActions'
 
 class Projects extends Component {
+  constructor() {
+    super();
+    this.state = {
+      projects: []
+    }
+  }
 	
   componentWillMount() {
     this.props.fetchProjects();
@@ -18,8 +24,18 @@ class Projects extends Component {
   }
 
   deleteIt(id) {
-    this.props.deleteProject(this.props.projects, id);
-    console.log(this.props.projects);
+    this.props.deleteProject(id);
+    let projects = this.props.projects;
+    projects.some(function(item, index) {
+      if(item.id === id){
+        // found it!
+        projects.splice(index, 1);
+        return true; // stops the loop
+      }
+      return false;
+    });
+    this.setState({"projects": projects});
+    //console.log(this.props.projects);
   }
 
   render() {
