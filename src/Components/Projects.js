@@ -20,6 +20,7 @@ class Projects extends Component {
     console.log('Component will receive props ', nextProps.newProject);
     if(nextProps.newProject) {
       this.props.projects.unshift(nextProps.newProject);
+      //this.setState({"projects": this.props.projects.unshift(nextProps.newProject)});
     }
   }
 
