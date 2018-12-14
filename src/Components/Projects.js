@@ -10,6 +10,13 @@ class Projects extends Component {
     this.props.fetchProjects();
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log('Component will receive props ', nextProps.newProject);
+    if(nextProps.newProject) {
+      this.props.projects.unshift(nextProps.newProject);
+    }
+  }
+
   deleteIt(id) {
     this.props.deleteProject(this.props.projects, id);
     console.log(this.props.projects);
@@ -37,11 +44,13 @@ Projects.propTypes = {
   fetchProjects: PropTypes.func.isRequired,
   deleteProject: PropTypes.func.isRequired,
 	projects: PropTypes.array.isRequired,
+  newProject: PropTypes.object,
 	onDelete: PropTypes.func
 };
 
 const mapStateToProps = state => ({
-  projects: state.projects.items
-})
+  projects: state.projects.items,
+  newProject: state.projects.item
+});
 
 export default connect(mapStateToProps, { fetchProjects, deleteProject })(Projects);

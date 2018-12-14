@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'uuid';
+import { connect } from 'react-redux';
+import { addProject } from '../actions/projectActions'
 
 class AddProject extends Component {
   constructor() {
     super();
     this.state = {
-      newProject: {}
+      title: '',
+      body: ''
     }
   }
 
@@ -15,19 +18,28 @@ class AddProject extends Component {
   }
 
   handleSubmit(e) {
+    e.preventDefault();
     if(this.refs.title.value === "") {
       alert('Title is required');
     }else{
-      this.setState({newProject: {
+      /*this.setState({newProject: {
         id: uuid.v4(),
         title: this.refs.title.value,
         category: this.refs.category.value
       }}, function() {
         //console.log(this.state);
-        this.props.addProject(this.state.newProject);
-      });
+        this.props.addProject(this.props.projects, this.state.newProject);
+      });*/
+      const project = {
+        title: this.state.title,
+        body: this.state.title
+      };
+      this.props.addProject(project);
     }
-    e.preventDefault();
+  }
+
+  handleChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
   }
   render() {
     let categoryOptions = this.props.categories.map(category => {
@@ -41,7 +53,7 @@ class AddProject extends Component {
         <form onSubmit={this.handleSubmit.bind(this)}>
           <div>
             <label>Title</label><br/>
-            <input type="text" ref="title" />
+            <input type="text" name="title" ref="title" onChange={this.handleChange.bind(this)} />
           </div>
           <div>
             <label>Category</label><br/>
@@ -59,7 +71,11 @@ class AddProject extends Component {
 
 AddProject.propTypes = {
   categories: PropTypes.array,
-  addProject: PropTypes.func
+  addProject: PropTypes.func.isRequired
 };
 
-export default AddProject;
+const mapStateToProps = state => ({
+  projects: state.projects.items
+})
+
+export default connect(mapStateToProps, { addProject })(AddProject);

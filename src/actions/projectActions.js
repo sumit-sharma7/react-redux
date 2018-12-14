@@ -19,3 +19,18 @@ export const deleteProject = (projects, id) => dispatch => {
     	payload: projects
     });
 }
+
+export const addProject = projectData => dispatch => {
+	fetch('https://jsonplaceholder.typicode.com/posts', {
+	    method: 'POST',
+	    body: JSON.stringify(projectData),
+	    headers: {
+	      "Content-type": "application/json; charset=UTF-8"
+	    }
+	  })
+	  .then(response => response.json())
+	  .then(project => dispatch({
+			type: NEW_PROJECT,
+			payload: project
+		}));
+}
